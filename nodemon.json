@@ -1,0 +1,4 @@
+{
+	"watch": ["server.js", "package.json", "nodemon.json", ".env", "models/*", "libs/*"],
+	"ignore": [".git/*", "node_modules/*"]
+}

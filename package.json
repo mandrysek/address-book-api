@@ -1,0 +1,26 @@
+{
+	"name": "address-book-api",
+	"version": "1.0.0",
+	"main": "server.js",
+	"repository": "git@github.com:mandrysek/address-book-api.git",
+	"author": "Miroslav Andrýsek <miroslav.andrysek@gmail.com>",
+	"license": "MIT",
+	"dependencies": {
+		"bcrypt": "^1.0.2",
+		"body-parser": "^1.16.1",
+		"dotenv": "^4.0.0",
+		"express": "^4.14.1",
+		"firebase": "^3.6.9",
+		"jsonwebtoken": "^7.3.0",
+		"pg": "^6.1.2",
+		"validate": "^3.0.1"
+	},
+	"engines": {
+		"node": "^7.2.0",
+		"yarn": "^0.20.3"
+	},
+	"scripts": {
+		"start": "node server.js",
+		"watcher": "DATABASE_URL=$(heroku config:get DATABASE_URL -a address-book-api) nodemon -V -L server.js"
+	}
+}
