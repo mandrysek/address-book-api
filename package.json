@@ -16,8 +16,7 @@
 		"validate": "^3.0.1"
 	},
 	"engines": {
-		"node": "^7.2.0",
-		"yarn": "^0.20.3"
+		"node": "^7.2.0"
 	},
 	"scripts": {
 		"start": "node server.js",
