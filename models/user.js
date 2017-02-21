@@ -49,21 +49,24 @@ const create = function (params) {
 
 		const selectQuery = `SELECT id FROM ${db.schema}.user WHERE email = $1`;
 
-		return db.query(selectQuery, [params.email]).then(function ({ rows }) {
+		db.query(selectQuery, [params.email]).then(function ({ rows }) {
 			if (rows.length) {
 				reject(BadRequest('User with this email already exist'))
 				return;
 			}
 
-			bcrypt.hash(params.password + secretKey, 10).then(function (hash) {
+			bcrypt.hash(params.password + secretKey, 10, function (err, hash) {
+				if (err) {
+					reject(BadRequest('Password couldn`t be encrypted.'));
+					return;
+				}
+
 				const insertQuery = `INSERT INTO ${db.schema}.user (name, email, password) VALUES ($1, $2, $3)`;
 				db.query(insertQuery, [params.name, params.email, hash], true).then(function () {
 					resolve()
 				}).catch(function () {
 					reject(Failure('User couldn`t be created'));
 				});
-			}).catch(function () {
-				reject(BadRequest('Password couldn`t be encrypted.'))
 			});
 		}).catch(function () {
 			reject(Failure('User couldn`t be created'));
@@ -80,14 +83,19 @@ const login = function (params) {
 		}
 		const selectQuery = `SELECT id, name, password FROM ${db.schema}.user WHERE email = $1`;
 
-		db.query(selectQuery, [params.email], true).then(function ({rows}) {
+		db.query(selectQuery, [params.email], true).then(function ({ rows }) {
 			const user = rows[0];
 			if (!user) {
 				reject(NotFound('User couldn`t be found'))
 				return;
 			}
 
-			bcrypt.compare(params.password + secretKey, user.password).then(function (res) {
+			bcrypt.compare(params.password + secretKey, user.password, function (err, res) {
+				if (err) {
+					reject(Failure());
+					return;
+				}
+
 				if (!res) {
 					reject(Forbidden('Invalid password'));
 					return;
@@ -107,9 +115,7 @@ const login = function (params) {
 
 					resolve(token);
 				});
-			}).catch(function () {
-				reject(Failure());
-			})
+			});
 		})
 	});
 };
