@@ -1,4 +1,10 @@
 require('dotenv').config();
+
+if (!process.env.DATABASE_URL) {
+	console.log('Database is not provided');
+	process.exit(0);
+}
+
 const port = process.env.PORT || 8080;
 const express = require('express');
 const app = express();

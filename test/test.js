@@ -1,4 +1,10 @@
 require('dotenv').config();
+
+if (!process.env.DATABASE_URL) {
+	console.log('Database is not provided');
+	process.exit(0);
+}
+
 const assert = require('assert');
 const proxyquire = require('proxyquire');
 const originalEnv = process.env.NODE_ENV;
