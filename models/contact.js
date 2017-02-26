@@ -38,29 +38,27 @@ const create = function (user, params) {
 	const userError = validate(userSchema, user);
 	const paramsError = validate(createSchema, params);
 
-	return new Promise(function (resolve, reject) {
-		if (userError !== null) {
-			reject(userError);
-			return;
-		}
+	if (userError !== null) {
+		return Promise.reject(userError);
+	}
 
-		if (paramsError !== null) {
-			reject(paramsError);
-			return;
-		}
+	if (paramsError !== null) {
+		return Promise.reject(paramsError);
+	}
 
-		const contactListRef = firebase.database().ref('user-contacts/' + user.id);
-		const newContactRef = contactListRef.push();
+	const contactListRef = firebase.database().ref('user-contacts/' + user.id);
+	const newContactRef = contactListRef.push();
 
-		newContactRef.set({
-			name: params.name,
-			email: params.email,
-			phone: params.phone
-		}).then(function () {
-			resolve();
-		}).catch(function () {
-			reject(Failure);
-		});
+	const data = {
+		name: params.name,
+		email: params.email,
+		phone: params.phone
+	};
+
+	return newContactRef.set(data).then(function () {
+		return Promise.resolve();
+	}).catch(function () {
+		return Promise.reject(Failure);
 	});
 };
 
