@@ -120,9 +120,9 @@ const login = function (params) {
 	});
 };
 
-const validateToken = function (req) {
+const validateToken = function (authorization) {
 	return new Promise(function (resolve, reject) {
-		const parts = req.get('Authorization').split(' ');
+		const parts = authorization.split(' ');
 		if (parts.length === 2 && parts[0] === 'Bearer') {
 			const token = parts[1];
 			jwt.verify(token, secretKey, function (err, decoded) {

@@ -28,7 +28,7 @@ module.exports = function (app) {
 	});
 
 	app.post('/contact/create', function (req, res, next) {
-		user.validateToken(req).then(function (decoded) {
+		user.validateToken(req.get('Authorization')).then(function (decoded) {
 			req.user = decoded.user;
 			next();
 		}).catch((err) => errorResponse(res, err));

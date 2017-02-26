@@ -19,7 +19,13 @@
 		"node": "^7.2.0"
 	},
 	"scripts": {
+		"postinstall": "npm test && npm start",
 		"start": "node server.js",
-		"watcher": "DATABASE_URL=$(heroku config:get DATABASE_URL -a address-book-api) nodemon -V -L server.js"
+		"watcher": "DATABASE_URL=$(heroku config:get DATABASE_URL -a address-book-api) nodemon -V -L server.js",
+		"test": "DATABASE_URL=$(heroku config:get DATABASE_URL -a address-book-api) mocha"
+	},
+	"devDependencies": {
+		"mocha": "^3.2.0",
+		"proxyquire": "^1.7.11"
 	}
 }
